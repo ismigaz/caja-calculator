@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Cuenta efectivo en pesos colombianos y guarda tus últimas sesiones de caja.">
+<title>Caja Calculator</title>
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<main id="app">
+  <header><p class="eyebrow">Efectivo bajo control</p><div class="title-line"><h1>Caja Calculator</h1><button id="help-open" class="icon-button info-button" type="button" aria-label="Instrucciones de uso" title="Instrucciones de uso"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.2"/></svg></button></div><p class="muted">Cuenta, guarda y consulta tus últimas sesiones.</p><button id="sessions-open" class="sessions-button" type="button" aria-label="Abrir borrador, historial y respaldos" title="Borrador, historial y respaldos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v14H4zM3 3h18v4H3zM9 11h6M9 15h6"/></svg><span>Mis conteos</span></button></header>
+  <section class="card" aria-labelledby="current-title">
+    <div class="card-header"><h2 id="current-title">Conteo actual</h2></div>
+    <p id="save-status" class="status" role="status" aria-live="polite"></p>
+    <label class="note-label" for="note">Nombre o nota <span class="muted">(opcional)</span></label>
+    <input id="note" type="text" maxlength="120" placeholder="Ej.: Cierre del viernes" autocomplete="off">
+    <div class="table-scroll"><table><thead><tr><th>Denominación</th><th>Unidades</th><th>Subtotal</th></tr></thead>
+      <tbody><tr class="group-heading"><th colspan="3" scope="colgroup">Billetes</th></tr></tbody><tbody id="count-body"></tbody>
+      <tbody><tr class="group-subtotal"><th colspan="2" scope="row">Subtotal billetes</th><td id="bills-total" class="numeric"></td></tr><tr class="group-heading"><th colspan="3" scope="colgroup">Monedas</th></tr></tbody><tbody id="coins-body"></tbody>
+      <tbody><tr class="group-subtotal"><th colspan="2" scope="row">Subtotal monedas</th><td id="coins-total" class="numeric"></td></tr></tbody>
+      <tfoot><tr><th colspan="2">Total completo</th><td id="grand-total" class="numeric">$ 0</td></tr></tfoot></table></div>
+    <div class="count-actions"><button id="new-count" type="button">Nuevo conteo</button><button id="save-record" type="button" class="primary">Guardar conteo</button></div>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+  </section>
+</main>
+<dialog id="sessions-dialog" class="sessions-dialog" aria-labelledby="sessions-title">
+  <div class="modal-heading"><h2 id="sessions-title">Mis conteos</h2><button type="button" id="sessions-close" aria-label="Cerrar mis conteos">×</button></div>
+  <section class="draft" aria-labelledby="draft-heading"><div class="draft-line"><div><h3 id="draft-heading" class="badge">Borrador · Autoguardado</h3><time id="draft-time">Sin guardar aún</time></div><strong id="draft-total" class="numeric">$ 0</strong></div><h3 id="draft-note">Sin nombre</h3><div id="draft-breakdown" class="breakdown"></div><p id="draft-caption"></p><div class="actions"><button id="draft-resume" type="button">Retomar conteo</button></div></section>
+  <section class="history-section" aria-labelledby="history-title"><div class="section-title"><h2 id="history-title">Conteos anteriores</h2><span id="history-count">0/10</span></div><p class="hint">Los 10 más recientes. Al guardar el número 11, se retira el más antiguo.</p><div id="history-list"></div></section>
+  <section class="backup-section" aria-labelledby="backup-title"><h2 id="backup-title">Respaldos</h2><p class="muted">Los datos se guardan en este navegador. Exporta un respaldo para conservarlos o llevarlos a otro dispositivo.</p><div class="actions"><button id="export" type="button">Exportar respaldo</button><label class="file-button">Importar respaldo<input id="import-file" type="file" accept=".json,application/json" aria-label="Importar respaldo JSON"></label></div></section>
+  <p id="hub-status" class="status" role="status" aria-live="polite"></p><div id="hub-notice" class="notice" role="status" aria-live="polite"></div>
+</dialog>
+<dialog id="help-dialog" aria-labelledby="help-title"><div class="modal-heading"><h2 id="help-title">Cómo usar Caja Calculator</h2><button id="help-close" type="button" aria-label="Cerrar instrucciones">×</button></div><ol class="instructions"><li><strong>Cuenta tu efectivo.</strong> Escribe las unidades de cada denominación. Verás el subtotal de billetes, el de monedas y el total completo.</li><li><strong>Añade una nota si quieres.</strong> Te ayudará a reconocer el conteo después.</li><li><strong>El borrador se guarda automáticamente.</strong> Al volver se recupera el conteo en curso. No ocupa un lugar en el historial.</li><li><strong>Pulsa «Guardar conteo»</strong> para conservar una copia en el historial de las diez sesiones más recientes.</li><li><strong>Abre «Mis conteos»</strong> desde el botón debajo del subtítulo para retomar el borrador, revisar registros o exportar e importar respaldos. «Ver detalle» solo consulta; «Usar como base» lleva una copia al formulario.</li><li><strong>Usa «Nuevo conteo»</strong> para empezar de cero. Si hay cambios fuera del historial, podrás guardarlos antes.</li></ol><p class="hint">Enter: siguiente campo · Ctrl/Cmd + S: guardar en el historial.</p><p class="hint">Monedas: $500, $200, $100 y $50. Los datos son locales a este navegador; exporta un respaldo antes de borrarlos o cambiar de dispositivo.</p></dialog>
+<dialog id="detail-dialog" aria-labelledby="detail-title"><div class="modal-heading"><h2 id="detail-title"></h2><button type="button" id="detail-close" aria-label="Cerrar detalle">×</button></div><p id="detail-date"></p><div class="table-scroll"><table><thead><tr><th>Denominación</th><th>Unidades</th><th>Subtotal</th></tr></thead><tbody id="detail-body"></tbody><tfoot><tr class="group-subtotal"><th colspan="2">Subtotal billetes</th><td id="detail-bills" class="numeric"></td></tr><tr class="group-subtotal"><th colspan="2">Subtotal monedas</th><td id="detail-coins" class="numeric"></td></tr><tr><th colspan="2">Total completo</th><td id="detail-total" class="numeric"></td></tr></tfoot></table></div><div class="actions"><button id="detail-use" type="button" class="primary">Usar como base</button></div></dialog>
+<dialog id="replace-dialog" aria-labelledby="replace-title"><h2 id="replace-title">¿Guardar el conteo en curso?</h2><p>Este borrador tiene cambios que todavía no están en el historial. Puedes guardarlos antes de continuar.</p><p class="dialog-error error" role="alert"></p><div class="actions"><button id="replace-cancel" type="button">Cancelar</button><button id="replace-discard" type="button">Continuar sin guardar</button><button id="replace-save" type="button" class="primary">Guardar y continuar</button></div></dialog>
+<dialog id="import-dialog" aria-labelledby="import-title"><h2 id="import-title">Restaurar un respaldo</h2><p id="import-summary"></p><p class="dialog-error error" role="alert"></p><div class="actions"><button id="import-backup" type="button">Exportar antes</button><button id="import-cancel" type="button">Cancelar</button><button id="import-confirm" type="button" class="primary">Reemplazar y restaurar</button></div></dialog>
+
+</body>
+</html>
