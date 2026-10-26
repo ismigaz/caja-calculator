@@ -4,7 +4,7 @@ Calculadora de efectivo en pesos colombianos, sin dependencias externas.
 
 ## Funciones
 
-- Conteo por denominación, separado entre billetes y monedas ($500, $200, $100 y $50).
+- Conteo por denominación, separado entre billetes y monedas ($1.000, $500, $200, $100 y $50).
 - Subtotales de billetes y monedas y total completo.
 - Borrador automático y los diez conteos guardados más recientes.
 - Notas, consulta de detalles y uso de registros como base.

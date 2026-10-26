@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const VALUES = [100000,50000,20000,10000,5000,2000,1000,500,200,100,50];
-const COINS = new Set([500,200,100,50]);
+const COINS = new Set([1000,500,200,100,50]);
 const breakdown = items => ({bills:total(items.filter(d=>!COINS.has(d.value))),coins:total(items.filter(d=>COINS.has(d.value)))});
 const KEY = 'caja-calculator-v3', LEGACY = 'caja-calculator-v2';
 const zero = () => VALUES.map(value => ({value, qty:0}));
