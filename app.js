@@ -73,6 +73,7 @@ function unsaved() {
 function renderTotals() {
   state.draft.items.forEach(d => $('subtotal-'+d.value).textContent=money(d.value*d.qty));
   $('grand-total').textContent=money(total(state.draft.items));
+  $('grand-total').classList.toggle('large-amount', money(total(state.draft.items)).length > 16);
   $('draft-total').textContent=money(total(state.draft.items));
   const sums=breakdown(state.draft.items);
   $('bills-total').textContent=money(sums.bills); $('coins-total').textContent=money(sums.coins);
@@ -82,7 +83,10 @@ function renderTotals() {
 }
 function text(tag, content, cls) { const el=document.createElement(tag); el.textContent=content; if(cls)el.className=cls; return el; }
 function action(label, fn, cls='secondary') {
-  const b=text('button',label,cls); b.type='button'; b.addEventListener('click',fn); return b;
+  const b=text('button','',cls); b.type='button';
+  const icon=label==='Ver detalle'?'eye':'copy';
+  if(window.CajaIcons)b.append(window.CajaIcons.create(icon));
+  b.append(text('span',label)); b.addEventListener('click',fn); return b;
 }
 function breakdownLabels(items) {
   const sums=breakdown(items);
@@ -91,7 +95,12 @@ function breakdownLabels(items) {
 function renderHistory() {
   $('history-count').textContent=state.records.length+'/10';
   const host=$('history-list'); host.replaceChildren();
-  if(!state.records.length) host.append(text('p','Todavía no tienes conteos guardados. Usa «Guardar conteo» para conservar una sesión.','muted empty'));
+  if(!state.records.length) {
+    const empty=text('p','','muted empty');
+    if(window.CajaIcons)empty.append(window.CajaIcons.create('folder-open'));
+    empty.append(text('span','Todavía no tienes conteos guardados. Usa «Guardar conteo» para conservar una sesión.'));
+    host.append(empty);
+  }
   state.records.forEach(r => {
     const article=document.createElement('article'); article.className='record';
     const info=document.createElement('div');
@@ -257,6 +266,7 @@ function init() {
   window.addEventListener('pagehide',()=>{if(snapshot(state.draft)!==stored)persist();});
   window.addEventListener('beforeunload',e=>{if(snapshot(state.draft)!==stored&&!persist()){e.preventDefault();e.returnValue='';}});
   load();render();
+  if(window.CajaIcons)window.CajaIcons.render();
 }
 if(typeof document!=='undefined')init();
 if(typeof module!=='undefined')module.exports={validateState,validateSnapshot,total,snapshot,VALUES};
