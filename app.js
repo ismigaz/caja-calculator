@@ -118,7 +118,8 @@ function action(label, fn, cls='secondary') {
   const b=text('button','',cls); b.type='button';
   const icon=label==='Eliminar'?'trash-2':label==='Ver detalle'?'eye':'copy';
   if(window.CajaIcons)b.append(window.CajaIcons.create(icon));
-  b.append(text('span',label)); b.addEventListener('click',fn); return b;
+  b.setAttribute('aria-label',label); b.title=label;
+  b.append(text('span',label,'action-label')); b.addEventListener('click',fn); return b;
 }
 function breakdownLabels(items) {
   const sums=breakdown(items);
@@ -139,7 +140,9 @@ function renderHistory() {
     info.append(text('span','Conteo guardado','badge manual'),text('h3',r.note || 'Sin nombre'),text('p',date(r.savedAt),'muted'));
     const sums=document.createElement('div');sums.className='breakdown';sums.append(...breakdownLabels(r.items));info.append(sums);
     const side=document.createElement('div'); side.className='record-side';
-    const buttons=document.createElement('div'); buttons.className='actions';
+    const buttons=document.createElement('div'); buttons.className='actions action-group';
+    buttons.setAttribute('role','group');
+    buttons.setAttribute('aria-label','Acciones del conteo '+(r.note||'sin nombre'));
     buttons.append(action('Ver detalle',()=>openDetail(r)),action('Usar como base',()=>{closeDialog('sessions-dialog');requestReplacement(()=>useRecord(r));}));
     const remove=action('Eliminar',()=>requestDelete(r),'danger-text');
     remove.dataset.recordDelete=r.id;

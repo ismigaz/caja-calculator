@@ -221,3 +221,29 @@ dialog .actions { margin-top: 20px; }
 html { scroll-padding-bottom: 110px; }
 main { padding-bottom: calc(100px + env(safe-area-inset-bottom)); }
 @media print { .snackbar { display: none !important; } }
+
+/* Related commands share an outline without implying a selected state. */
+.action-group { display: inline-flex; flex-wrap: nowrap; gap: 0; max-width: 100%; }
+.action-group > button, .action-group > .file-button {
+  margin: 0;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 0;
+}
+.action-group > :not(:first-child) { border-inline-start-width: 0; }
+.action-group > :first-child { border-start-start-radius: 24px; border-end-start-radius: 24px; }
+.action-group > :last-child { border-start-end-radius: 24px; border-end-end-radius: 24px; }
+.action-group > :focus-visible, .action-group > :focus-within { position: relative; z-index: 1; }
+.record { flex-wrap: wrap; }
+.record-side { max-width: 100%; }
+@media (max-width: 599px) {
+  .action-group .action-label { display: none; }
+  .action-group > button, .action-group > .file-button,
+  .record .action-group > button {
+    width: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 12px;
+    gap: 0;
+    flex: 0 0 48px;
+  }
+}
