@@ -36,6 +36,7 @@ const money = n => nf.format(n);
 const date = d => d ? new Intl.DateTimeFormat('es-CO',{dateStyle:'medium',timeStyle:'short'}).format(new Date(d)) : 'Sin guardar aún';
 let state = {version:3, draft:{items:zero(),note:'',updatedAt:null},records:[]};
 let timer, stored = '', blocked = false, detailRecord = null, pending = null;
+let deletingRecordId=null;
 const dialogFocus = new Map();
 let snackbarTimer, snackbarVisible=false, snackbarFocus=null;
 function hideSnackbar() {
@@ -115,7 +116,7 @@ function renderTotals() {
 function text(tag, content, cls) { const el=document.createElement(tag); el.textContent=content; if(cls)el.className=cls; return el; }
 function action(label, fn, cls='secondary') {
   const b=text('button','',cls); b.type='button';
-  const icon=label==='Ver detalle'?'eye':'copy';
+  const icon=label==='Eliminar'?'trash-2':label==='Ver detalle'?'eye':'copy';
   if(window.CajaIcons)b.append(window.CajaIcons.create(icon));
   b.append(text('span',label)); b.addEventListener('click',fn); return b;
 }
@@ -140,6 +141,10 @@ function renderHistory() {
     const side=document.createElement('div'); side.className='record-side';
     const buttons=document.createElement('div'); buttons.className='actions';
     buttons.append(action('Ver detalle',()=>openDetail(r)),action('Usar como base',()=>{closeDialog('sessions-dialog');requestReplacement(()=>useRecord(r));}));
+    const remove=action('Eliminar',()=>requestDelete(r),'danger-text');
+    remove.dataset.recordDelete=r.id;
+    remove.setAttribute('aria-label','Eliminar conteo '+(r.note||'sin nombre')+' del '+date(r.savedAt));
+    buttons.append(remove);
     side.append(text('strong',money(total(r.items)),'record-total'),buttons);
     article.append(info,side); host.append(article);
   });
@@ -161,6 +166,28 @@ function saveRecord() {
   state.records=[r,...state.records].slice(0,10);
   if(!persist()) { state.records=previous; message('El registro no se pudo guardar. El conteo sigue disponible en pantalla.',true); return false; }
   renderHistory(); renderTotals(); message('Conteo guardado en el historial.'); return true;
+}
+function requestDelete(record) {
+  deletingRecordId=record.id;
+  $('delete-summary').textContent='«'+(record.note||'Sin nombre')+'» · '+date(record.savedAt)+' · '+money(total(record.items));
+  showDialog('delete-dialog');
+}
+function deleteRecord() {
+  const index=state.records.findIndex(r=>r.id===deletingRecordId);
+  if(index<0)return;
+  const previous=state.records;
+  state.records=state.records.filter(r=>r.id!==deletingRecordId);
+  if(!persist()) {
+    state.records=previous;
+    $('delete-dialog').querySelector('.dialog-error').textContent='No se pudo eliminar el conteo. El registro se conserva; vuelve a intentarlo o exporta un respaldo.';
+    return;
+  }
+  deletingRecordId=null;
+  closeDialog('delete-dialog');
+  renderHistory();renderTotals();
+  const remaining=$('history-list').querySelectorAll('[data-record-delete]');
+  (remaining[Math.min(index,remaining.length-1)]||$('draft-resume')).focus({preventScroll:true});
+  message('Conteo eliminado del historial.');
 }
 function showDialog(id) {
   dialogFocus.set(id,document.activeElement);
@@ -255,6 +282,9 @@ function load() {
   }catch(e){blocked=true;stored=snapshot(state.draft);status('No se pudieron leer los datos guardados.',true);message('Los datos originales se conservaron. Exporta una copia de recuperación o importa un respaldo válido.',true);}
 }
 function init() {
+  $('delete-cancel').addEventListener('click',()=>{deletingRecordId=null;closeDialog('delete-dialog');});
+  $('delete-confirm').addEventListener('click',deleteRecord);
+  $('delete-dialog').addEventListener('cancel',()=>{deletingRecordId=null;});
   document.querySelectorAll('dialog').forEach(el=>el.addEventListener('close',syncSnackbar));
   $('snackbar-close').addEventListener('click',()=>{
     hideSnackbar();

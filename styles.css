@@ -68,6 +68,10 @@ input[type=number]:focus { border-color: var(--md-sys-color-primary); background
 .status:empty, .notice:empty, .dialog-error:empty { display: none; }
 .notice { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); padding: 12px 14px; border-radius: var(--md-sys-shape-corner-medium); font-size: 13px; margin-top: 14px; }
 .error { color: var(--md-sys-color-error) !important; }
+.danger-text { color: var(--md-sys-color-error); }
+.danger-text:hover { background: var(--md-sys-color-error-container); }
+.danger-filled { background: var(--md-sys-color-error); color: var(--md-sys-color-on-primary); }
+.danger-filled:hover, .danger-filled:active { background: #7e1418; }
 .notice.error { background: var(--md-sys-color-error-container); }
 .table-scroll { overflow-x: auto; }
 table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; margin-top: 18px; }
