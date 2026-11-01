@@ -9,9 +9,9 @@
 <link rel="icon" href="favicon.svg?v=1" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=1">
 <meta name="theme-color" content="#f6fbf5">
-<link rel="stylesheet" href="styles.css?v=material-original-layout-2">
-<script src="icons.js?v=material-original-layout-2" defer></script>
-<script src="app.js?v=material-original-layout-2" defer></script>
+<link rel="stylesheet" href="styles.css?v=material-snackbar-3">
+<script src="icons.js?v=material-snackbar-3" defer></script>
+<script src="app.js?v=material-snackbar-3" defer></script>
 </head>
 <body>
 <main id="app">
@@ -42,5 +42,6 @@
 <dialog id="replace-dialog" aria-labelledby="replace-title"><h2 id="replace-title">¿Guardar el conteo en curso?</h2><p>Este borrador tiene cambios que todavía no están en el historial. Puedes guardarlos antes de continuar.</p><p class="dialog-error error" role="alert"></p><div class="actions"><button id="replace-cancel" type="button">Cancelar</button><button id="replace-discard" type="button">Continuar sin guardar</button><button id="replace-save" type="button" class="primary">Guardar y continuar</button></div></dialog>
 <dialog id="import-dialog" aria-labelledby="import-title"><h2 id="import-title">Restaurar un respaldo</h2><p id="import-summary"></p><p class="dialog-error error" role="alert"></p><div class="actions"><button id="import-backup" type="button">Exportar antes</button><button id="import-cancel" type="button">Cancelar</button><button id="import-confirm" type="button" class="primary">Reemplazar y restaurar</button></div></dialog>
 
+<div id="snackbar" class="snackbar" popover="manual" hidden><span id="snackbar-text" role="status" aria-live="polite" aria-atomic="true"></span><button id="snackbar-close" type="button" aria-label="Cerrar notificación">×</button></div>
 </body>
 </html>

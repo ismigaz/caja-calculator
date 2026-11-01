@@ -22,6 +22,7 @@ Abre `index.html` en tu navegador o sirve esta carpeta con cualquier servidor es
 - Se conserva el contenido y su orden original en móvil, tablet y escritorio: ayuda junto al título, estado de guardado antes de la nota, total en el pie de la tabla y acciones debajo de los cálculos.
 - «Mis conteos» permanece debajo del subtítulo. El historial, la ayuda y el detalle se presentan como hojas inferiores en móvil y diálogos en escritorio.
 - El icono de información original se incluye directamente en HTML. Los demás iconos de Lucide 1.8.0 están incluidos localmente en `icons.js`. Solo se incluyen los necesarios; no se descarga una biblioteca ni una fuente al abrir la app. Licencia en `LICENSE-LUCIDE`.
+- Las confirmaciones breves usan un único snackbar inferior durante seis segundos. Puede cerrarse y su temporizador se pausa con el puntero o el foco. Los errores permanecen junto al contenido; el estado de autoguardado mantiene su ubicación.
 - Se respeta la preferencia de movimiento reducido. Los iconos decorativos se ocultan a los lectores de pantalla y las acciones conservan etiquetas accesibles.
 
 La interfaz usa HTML, CSS y JavaScript nativos, inspirados en Material Design; no requiere Angular Material ni otro framework.

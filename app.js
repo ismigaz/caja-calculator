@@ -37,8 +37,39 @@ const date = d => d ? new Intl.DateTimeFormat('es-CO',{dateStyle:'medium',timeSt
 let state = {version:3, draft:{items:zero(),note:'',updatedAt:null},records:[]};
 let timer, stored = '', blocked = false, detailRecord = null, pending = null;
 const dialogFocus = new Map();
+let snackbarTimer, snackbarVisible=false, snackbarFocus=null;
+function hideSnackbar() {
+  clearTimeout(snackbarTimer);
+  snackbarVisible=false;
+  const el=$('snackbar');
+  if(el.hidePopover && el.matches(':popover-open'))el.hidePopover();
+  el.hidden=true;
+}
+function syncSnackbar() {
+  if(!snackbarVisible)return;
+  const el=$('snackbar'), dialogs=[...document.querySelectorAll('dialog[open]')];
+  const host=dialogs.at(-1)||document.body;
+  // Keep the notification interactive within the currently active modal.
+  if(el.parentElement!==host)host.append(el);
+  el.hidden=false;
+  if(el.showPopover && !el.matches(':popover-open'))el.showPopover();
+}
+function scheduleSnackbarClose() {
+  clearTimeout(snackbarTimer);
+  if(snackbarVisible)snackbarTimer=setTimeout(hideSnackbar,6000);
+}
+function showSnackbar(text) {
+  const el=$('snackbar');
+  if(!el.contains(document.activeElement))snackbarFocus=document.activeElement;
+  snackbarVisible=true;
+  syncSnackbar();
+  $('snackbar-text').textContent=text;
+  if(!el.matches(':hover') && !el.contains(document.activeElement))scheduleSnackbarClose();
+  else clearTimeout(snackbarTimer);
+}
 function message(text, error=false) {
-  for(const id of ['notice','hub-notice']) {$(id).textContent=text; $(id).className='notice'+(error?' error':'');}
+  for(const id of ['notice','hub-notice']) {$(id).textContent=error?text:''; $(id).className='notice'+(error?' error':'');}
+  if(error)hideSnackbar();else showSnackbar(text);
 }
 function status(text, error=false) {
   for(const id of ['save-status','hub-status']) {$(id).textContent=text; $(id).className=error?'status error':'status';}
@@ -134,6 +165,7 @@ function saveRecord() {
 function showDialog(id) {
   dialogFocus.set(id,document.activeElement);
   $(id).showModal();
+  syncSnackbar();
 }
 function closeDialog(id) {
   $(id).close(); const error=$(id).querySelector('.dialog-error'); if(error)error.textContent=''; const previousFocus=dialogFocus.get(id);dialogFocus.delete(id);if(previousFocus && previousFocus.isConnected)previousFocus.focus();
@@ -223,6 +255,15 @@ function load() {
   }catch(e){blocked=true;stored=snapshot(state.draft);status('No se pudieron leer los datos guardados.',true);message('Los datos originales se conservaron. Exporta una copia de recuperación o importa un respaldo válido.',true);}
 }
 function init() {
+  document.querySelectorAll('dialog').forEach(el=>el.addEventListener('close',syncSnackbar));
+  $('snackbar-close').addEventListener('click',()=>{
+    hideSnackbar();
+    if(snackbarFocus?.isConnected && !snackbarFocus.closest('dialog:not([open])'))snackbarFocus.focus({preventScroll:true});
+  });
+  $('snackbar').addEventListener('pointerenter',()=>clearTimeout(snackbarTimer));
+  $('snackbar').addEventListener('pointerleave',()=>{if(!$('snackbar').contains(document.activeElement))scheduleSnackbarClose();});
+  $('snackbar').addEventListener('focusin',()=>clearTimeout(snackbarTimer));
+  $('snackbar').addEventListener('focusout',()=>{if(!$('snackbar').matches(':hover'))scheduleSnackbarClose();});
   VALUES.forEach((value,i)=>{
     const row=document.createElement('tr'), denomination=text('th',money(value));denomination.scope='row';
     const field=document.createElement('td'), input=document.createElement('input');
