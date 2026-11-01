@@ -31,7 +31,7 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 body:has(dialog[open]) { overflow: hidden; }
-main { max-width: 1080px; margin: 0 auto; padding: 28px 16px calc(168px + env(safe-area-inset-bottom)); }
+main { max-width: 850px; margin: 0 auto; padding: 24px 16px calc(32px + env(safe-area-inset-bottom)); }
 h1, h2, h3, p { margin: 0; }
 h1 { font-size: clamp(22px, 5vw, 30px); font-weight: 600; line-height: 1.25; letter-spacing: -.8px; }
 h2 { font-size: 22px; font-weight: 500; line-height: 1.3; }
@@ -51,20 +51,11 @@ button:focus-visible, input:focus-visible, .file-button:focus-within { outline: 
 .icon-button { width: 48px; height: 48px; padding: 12px; flex-shrink: 0; }
 .lucide { width: 20px; height: 20px; flex-shrink: 0; vertical-align: middle; }
 .icon-button .lucide { width: 24px; height: 24px; }
-.app-header { margin-bottom: 26px; }
-.brand-row { display: flex; align-items: center; gap: 12px; }
-.brand-copy { flex: 1; min-width: 0; }
-.app-mark { width: 48px; height: 48px; display: grid; place-items: center; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-radius: var(--md-sys-shape-corner-large); flex-shrink: 0; }
-.app-mark .lucide { width: 27px; height: 27px; }
+.app-header { margin-bottom: 20px; }
 .eyebrow { font-size: 11px; font-weight: 600; line-height: 1.5; letter-spacing: 1.1px; text-transform: uppercase; color: var(--md-sys-color-on-surface-variant); margin-bottom: 5px; }
-.subtitle { font-size: 14px; color: var(--md-sys-color-on-surface-variant); margin-top: 16px; }
 .sessions-button { margin-top: 16px; }
 .card { background: var(--md-sys-color-surface-container-lowest); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-extra-large); padding: 22px 16px 14px; min-width: 0; }
 .card-header, .section-title, .draft-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.currency-chip, .counter { border: 1px solid var(--md-sys-color-outline-variant); padding: 5px 11px; border-radius: var(--md-sys-shape-corner-small); font-size: 12px; font-weight: 600; color: var(--md-sys-color-on-surface-variant); }
-.note-field { position: relative; margin-top: 28px; }
-.note-field label { position: absolute; left: 12px; top: -9px; background: var(--md-sys-color-surface-container-lowest); padding: 0 5px; color: var(--md-sys-color-on-surface-variant); font-size: 12px; }
-.note-field label span { font-weight: 400; }
 input { color: var(--md-sys-color-on-surface); background: var(--md-sys-color-surface-container-lowest); border: 1px solid var(--md-sys-color-outline); border-radius: var(--md-sys-shape-corner-small); font-size: 16px; min-height: 48px; padding: 12px; min-width: 0; }
 input::placeholder { color: #667168; opacity: 1; }
 input[type=text] { width: 100%; min-height: 56px; }
@@ -78,7 +69,6 @@ input[type=number]:focus { border-color: var(--md-sys-color-primary); background
 .notice.error { background: var(--md-sys-color-error-container); }
 .table-scroll { overflow-x: auto; }
 table { border-collapse: collapse; width: 100%; table-layout: fixed; margin-top: 18px; }
-.denomination-col { width: 32%; }.quantity-col { width: 25%; }
 th, td { padding: 8px 4px; text-align: right; font-size: 13px; border-bottom: 1px solid var(--md-sys-color-surface-container); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 th:first-child, td:first-child { text-align: left; }
 thead th { font-size: 11px; font-weight: 500; color: var(--md-sys-color-on-surface-variant); padding-top: 0; padding-bottom: 12px; }
@@ -90,16 +80,10 @@ tbody th { font-weight: 500; }
 .group-subtotal th, .group-subtotal td { border: 0; color: var(--md-sys-color-primary); padding-top: 14px; padding-bottom: 14px; font-weight: 600; font-size: 12px; }
 tfoot th, tfoot td { padding-top: 18px; border: 0; font-size: 15px; }
 .numeric { font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.summary-card { position: fixed; inset: auto 0 0; z-index: 3; background: var(--md-sys-color-surface-container); border-top: 1px solid var(--md-sys-color-outline-variant); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 16px #15271b0a; }
-.summary-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.total-label { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; color: var(--md-sys-color-on-surface-variant); }
-.total-label .lucide { width: 18px; height: 18px; }
 #grand-total { font-size: clamp(20px, 5vw, 30px); font-weight: 600; letter-spacing: -.7px; color: var(--md-sys-color-primary); line-height: 1.3; text-align: right; }
 #grand-total.large-amount { font-size: 18px; }
-.summary-currency, .storage-hint { display: none; }
-.count-actions { display: flex; gap: 8px; margin-top: 12px; }
-.count-actions button { flex: 1; min-width: 0; padding: 10px 12px; font-size: 13px; }
-#new-count { order: -1; }
+.count-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.count-actions button { flex: 0 1 auto; min-width: 0; padding: 10px 12px; font-size: 13px; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px; }
 .muted, .hint { color: var(--md-sys-color-on-surface-variant); font-size: 14px; }
 .hint { font-size: 12px; margin-top: 10px; }
@@ -151,6 +135,9 @@ dialog .actions { margin-top: 20px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 @media (max-width: 599px) {
   main { padding-top: 20px; }
+  .count-actions { flex-wrap: nowrap; gap: 6px; }
+  .count-actions button { flex: 1 1 0; padding: 10px 8px; font-size: 12px; gap: 6px; }
+  .count-actions .lucide { width: 18px; height: 18px; }
   .sheet { position: fixed; inset: auto 0 0; width: 100%; max-width: none; max-height: 92dvh; margin: 0; border-radius: 28px 28px 0 0; padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); }
   .record { flex-direction: column; gap: 12px; }
   .record-side { align-items: flex-start; gap: 12px; }
@@ -159,8 +146,6 @@ dialog .actions { margin-top: 20px; }
 }
 @media (max-width: 359px) {
   main { padding-right: 12px; padding-left: 12px; }
-  .brand-row { gap: 8px; }
-  .app-mark { width: 40px; height: 44px; border-radius: 12px; }
   .eyebrow { font-size: 10px; letter-spacing: .6px; }
   h1 { font-size: 21px; }
   .card { padding-right: 12px; padding-left: 12px; }
@@ -169,33 +154,31 @@ dialog .actions { margin-top: 20px; }
 }
 @media (min-width: 600px) {
   main { padding: 40px 28px 44px; }
-  .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; gap: 24px; }
   .card { padding: 28px 24px 18px; }
-  .summary-card { position: sticky; inset: auto; top: 24px; border: 0; border-radius: var(--md-sys-shape-corner-extra-large); padding: 24px; box-shadow: none; }
-  .summary-total { align-items: flex-start; flex-direction: column; gap: 12px; }
-  .summary-currency { display: block; color: var(--md-sys-color-on-surface-variant); font-size: 12px; }
   #grand-total { font-size: 30px; text-align: left; max-width: 100%; }
-  .total-label { font-size: 13px; }
-  .count-actions { flex-direction: column; margin-top: 28px; gap: 12px; }
-  #new-count { order: initial; }
-  .count-actions button { flex: auto; font-size: 14px; padding: 12px; }
-  .storage-hint { display: flex; align-items: flex-start; gap: 8px; margin-top: 24px; color: var(--md-sys-color-on-surface-variant); font-size: 12px; }
-  .storage-hint .lucide { width: 16px; height: 16px; margin-top: 2px; }
+  .count-actions { margin-top: 20px; gap: 12px; }
+  .count-actions button { flex: 0 1 auto; font-size: 14px; padding: 12px; }
   th, td { font-size: 14px; }
-}
-@media (min-width: 600px) and (max-width: 799px) {
-  .workspace { grid-template-columns: minmax(0, 1fr) 220px; gap: 16px; }
-  main { padding-inline: 20px; }
-  .card { padding-inline: 16px; }
-  .summary-card { padding: 20px; }
-  th, td { font-size: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 @media print {
   main { padding: 0; }
-  .workspace { display: block; }
-  .summary-card { position: static; box-shadow: none; }
   .count-actions, .sessions-button, #help-open, dialog { display: none !important; }
 }
+
+/* Keep the original information hierarchy at every viewport width. */
+.title-line { display: flex; align-items: center; gap: 8px; }
+.title-line h1 { margin: 0; }
+.info-button { width: 44px; height: 44px; padding: 10px; }
+.info-button svg { display: block; width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.app-header > .muted { margin-top: 8px; }
+.note-label { display: block; margin: 20px 0 8px; font-size: 13px; font-weight: 600; }
+.note-label .muted { font-size: 13px; font-weight: 400; }
+.count-card { min-width: 0; }
+.counter { border: 1px solid var(--md-sys-color-outline-variant); padding: 5px 11px; border-radius: 8px; font-size: 12px; }
+#grand-total { font-size: clamp(20px, 4vw, 28px); text-align: right; }
+.modal-heading > button { flex-shrink: 0; min-width: 44px; padding: 8px 12px; font-size: 22px; }
+@media (min-width: 600px) { th, td { padding: 10px 8px; } }
+@media (max-width: 359px) { .count-actions button { flex: 1 1 auto; } }
